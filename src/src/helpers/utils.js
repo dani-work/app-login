@@ -1,10 +1,11 @@
 import {sessionName} from '../constants/app';
 
-export const getAuth = () => {
-    let sessionData = JSON.parse(localStorage.getItem(sessionName));
-    if (sessionData?.token) return true;
-    return false
-}
+// export const getAuth = () => {
+//     let sessionData = JSON.parse(localStorage.getItem(sessionName));
+//     if (sessionData?.token) return true;
+//     return false
+// }
+
 export const getSessionToken = () => {
     let sessionData = JSON.parse(localStorage.getItem(sessionName));
     return sessionData?.token;
@@ -32,7 +33,7 @@ export const formatTime = (time) => {
 
 export const getTimeMsSession = () =>{
 
-    let sessionData = localStorage.getItem(sessionName);
+    let sessionData = JSON.parse(localStorage.getItem(sessionName));
     if (!!sessionData){
         return new Date(sessionData.dateSession).getTime()
     }else{

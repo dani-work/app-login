@@ -15,11 +15,11 @@ export const loginPost = (email, password) =>{
 export const checkToken = (token) =>{
 
   return fetch(API_ROUTES.CHECK_TOKEN, {
-  method: 'POST',
+  method: 'GET',
   headers: {
     'Accept': 'application/json',
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({token})
+    'Content-Type': 'application/json',
+    'x-auth-token': token
+  }
 });
 }

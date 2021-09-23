@@ -2,24 +2,25 @@ import React from 'react'
 import { Redirect, Route } from 'react-router-dom'
 import PropTypes from 'prop-types';
 
-/* Check authorization to load private routes or redirect to Login */
-export const PrivateRoute = ({
+/* If Login is ok, redirect to Home */
+export const PublicRoute = ({
     isAuthorized,
     component: ComponentInvoked,
     ...rest
 }) => {
+    
     return (
         <Route {...rest}
             render={(props) => (
-                (isAuthorized)
+                (!isAuthorized)
                     ? <ComponentInvoked {...props} />
-                    : <Redirect to="/login" />
+                    : <Redirect to="/" />
             )}
         />
     )
 }
 
-PrivateRoute.propTypes = {
+PublicRoute.propTypes = {
     isAuthorized: PropTypes.bool.isRequired,
     component: PropTypes.func.isRequired,
 }
