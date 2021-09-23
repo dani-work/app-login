@@ -45,3 +45,12 @@
   max-width: 100%;
   text-align: center;
 }
+
+.fv-plugins-message-container {
+  margin-top: .25rem;
+}
+.fv-plugins-message-container .fv-help-block {
+  color: #f64e60;
+  font-size: .9rem;
+  font-weight: 400;
+}

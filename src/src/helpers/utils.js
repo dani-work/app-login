@@ -1,3 +1,3 @@
 export const getAuth = () =>{
-    return false;
+    return true;
 }

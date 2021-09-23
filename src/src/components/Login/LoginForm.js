@@ -1,54 +1,111 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { of } from "await-of";
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
+import * as Literals from '../../constants/literals';
+import { loginPost } from '../../helpers/fetch';
+
 
 export function LoginForm(props) {
 
-       const [formLoginValues, handleLoginInputChange] = useState({
-        lEmail: 'fernando@gmail.com',
-        lPassword: '123456'
+    const [loading, setLoading] = useState(false);
+    const LoginSchema = Yup.object().shape({
+      email: Yup.string()
+        .email(Literals.emailWrongFormat)
+        .min(3, Literals.minCharacters.replace("{x}", "3"))
+        .max(50, Literals.maxCharacters.replace("{x}", "50"))
+        .required(Literals.requiredField),
+      password: Yup.string()
+        .min(3, Literals.minCharacters.replace("{x}", "3"))
+        .max(50, Literals.maxCharacters.replace("{x}", "50"))
+        .required(Literals.requiredField),
     });
 
-    const [formRegisterValues, handleRegisterInputChange] = useState({
-        rName: 'Nando',
-        rEmail: 'nando@gmail.com',
-        rPassword1: '123456',
-        rPassword2: '123456'
-    });
+    const initialValues = {
+        email: "",
+        password: "",
+      };
 
-    const { lEmail, lPassword } = formLoginValues;
-    const { rName, rEmail, rPassword1, rPassword2 } = formRegisterValues;
+      const enableLoading = () => {
+        setLoading(true);
+      };
+    
+      const disableLoading = () => {
+        setLoading(false);
+      };
+    
 
-    const handleLogin = (e) => {
-        e.preventDefault();
-        //dispatch( startLogin( lEmail, lPassword ) );
-    }
+    const formik = useFormik({
+        initialValues,
+        validationSchema: LoginSchema,
+        onSubmit: async (values, { setStatus, setSubmitting }) => {
+          
+          enableLoading();
+          let [res, err] = await of(loginPost(values.email, values.password))
 
-    const handleRegister = (e) => {
-        e.preventDefault();
-
-        if (rPassword1 !== rPassword2) {
-            //return Swal.fire('Error', 'Las contraseñas deben de ser iguales','error');
+          if (err || (res && res.status !== 200)) {
+            setStatus(Literals.failValidation);
+            disableLoading();
+            setSubmitting(false);
+          }else{
+            let { data: {data: auther}}  = res;
+            disableLoading();
+            setSubmitting(false);
+            props.login(auther);
+          }          
         }
-        console.log('?')
-        //dispatch( startRegister( rEmail, rPassword1, rName ) );
-    }
+        });
 
 
     return (
         <div className="form-center">
-            <form onSubmit={handleLogin}>
+            <form onSubmit={formik.handleSubmit}>
+                {formik.status && (
+                    <div className="mb-10 alert alert-danger alert-dismissible fade show">
+                        <div className="alert-text font-weight-bold">{formik.status}</div>
+                        <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                )}
+
                 <div className="form-group">
-                    <TextField id="standard-basic" label="Email" variant="standard" className="form-control" />
+                    <TextField 
+                    id="email" 
+                    label="Email" 
+                    variant="standard" 
+                    className="form-control"
+                    {...formik.getFieldProps("email")} />
+                    {formik.touched.email && formik.errors.email ? (
+                        <div className="fv-plugins-message-container">
+                            <div className="fv-help-block">{formik.errors.email}</div>
+                        </div>
+                    ) : null}
                 </div>
                 <div className="form-group">
-                    <TextField id="standard-basic" label="Password" variant="standard" className="form-control" />
+                    <TextField 
+                    id="password" 
+                    label="Password" 
+                    variant="standard"
+                    type="password"
+                    className="form-control" 
+                    {...formik.getFieldProps("password")}
+                    />
+                    {formik.touched.password && formik.errors.password ? (
+                        <div className="fv-plugins-message-container">
+                            <div className="fv-help-block">{formik.errors.password}</div>
+                        </div>
+                    ) : null}
                 </div>
                 <br/>
                 <div className="form-group">
-                    <Button variant="contained" 
-                    style={{backgroundColor: '#214A80', color: '#FFFFFF'}}
-                    className="btnSubmit">Log In</Button>
+                    <Button variant="contained"
+                        style={{ backgroundColor: '#214A80', color: '#FFFFFF' }}
+                        type="submit"
+                        disabled={formik.isSubmitting}
+                        className="btnSubmit">                        
+                        <span>Log In</span> {loading && <span className="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>}
+                    </Button>
                 </div>
             </form>
         </div>
