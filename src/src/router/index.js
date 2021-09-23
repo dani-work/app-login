@@ -6,8 +6,8 @@ import {
     Redirect
 } from "react-router-dom";
 import { PrivateRoute } from './PrivateRoute';
-import { Login } from '../components/Login';
-import { Home } from '../components/Home';
+import { Login } from '../components/Login/LoginPage';
+import { Home } from '../components/Home/HomePage';
 import { getAuth } from '../helpers/utils';
 
 const isAuthorized = getAuth();
