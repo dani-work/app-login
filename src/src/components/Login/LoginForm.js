@@ -10,7 +10,7 @@ import { saveSession } from '../../helpers/utils';
 
 
 /* Form */
-export function LoginForm(props) {
+export function LoginForm({history}) {
 
     const [loading, setLoading] = useState(false);
     const LoginSchema = Yup.object().shape({
@@ -52,10 +52,12 @@ export function LoginForm(props) {
             disableLoading();
             setSubmitting(false);
           }else{
-            let { data: {data: token}}  = res;
+            let response = await res.json();
+            let data = response.data;
             disableLoading();
             setSubmitting(false);
-            saveSession(token);
+            saveSession(data.token);
+            history.push("/")
           }
         }
         });

@@ -11,7 +11,7 @@ export function Login() {
                 <div className="row">
                     <div className="col-md-12 login-form-1">
                         <img className="padlock-icon" src='media/svg/icons/padlock.svg' alt="padlock icon" />
-                        <LoginForm />
+                        <LoginForm/>
                     </div>
                 </div>
             </div>
