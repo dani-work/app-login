@@ -1,9 +1,12 @@
 import React from 'react'
+import { AuthInit } from './components/Login/AuthInit';
 import { AppRouter } from "./router";
 
 const App = () => {
   return (
-    <AppRouter />
+    <AuthInit>
+      <AppRouter />
+    </AuthInit>
   );
 }
 

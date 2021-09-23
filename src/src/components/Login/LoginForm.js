@@ -6,8 +6,10 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import * as Literals from '../../constants/literals';
 import { loginPost } from '../../helpers/fetch';
+import { saveSession } from '../../helpers/utils';
 
 
+/* Form */
 export function LoginForm(props) {
 
     const [loading, setLoading] = useState(false);
@@ -50,11 +52,11 @@ export function LoginForm(props) {
             disableLoading();
             setSubmitting(false);
           }else{
-            let { data: {data: auther}}  = res;
+            let { data: {data: token}}  = res;
             disableLoading();
             setSubmitting(false);
-            props.login(auther);
-          }          
+            saveSession(token);
+          }
         }
         });
 

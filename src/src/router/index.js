@@ -10,10 +10,11 @@ import { Login } from '../components/Login/LoginPage';
 import { Home } from '../components/Home/HomePage';
 import { getAuth } from '../helpers/utils';
 
-const isAuthorized = getAuth();
+
 
 /* Routes for the App */
 export const AppRouter = () => {
+    const isAuthorized = getAuth();
     return (
         <>
             <Router>
