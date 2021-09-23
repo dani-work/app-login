@@ -41,3 +41,11 @@
       font-size: 3.375rem;
     }
   }
+
+  .btnLogout {
+    width: 50%;
+    border-radius: 1rem;
+    padding: 1.5%;
+    border: none;
+    cursor: pointer;
+  }
